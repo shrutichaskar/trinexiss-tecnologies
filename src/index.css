@@ -19,12 +19,17 @@
 
 @layer base {
   body {
-    @apply bg-brand-bg text-brand-text-body selection:bg-brand-primary/30 selection:text-white;
+    @apply bg-brand-bg text-brand-text-body selection:bg-brand-primary/40 selection:text-white;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     letter-spacing: -0.01em;
     line-height: 1.6;
+    background-image: 
+      radial-gradient(circle at 100% 0%, rgba(88, 101, 242, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 0% 100%, rgba(0, 209, 255, 0.05) 0%, transparent 40%),
+      url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, .font-display {
@@ -70,10 +75,10 @@
   }
 
   .section-compact {
-    @apply py-16 md:py-24;
+    @apply py-12 md:py-16;
   }
 
   .card-padding {
-    @apply p-6 md:p-10;
+    @apply p-6 md:p-8;
   }
 }

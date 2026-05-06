@@ -37,6 +37,7 @@ import {
   Headset,
   ShoppingCart,
   Brain,
+  Activity,
   User,
   Cpu as CpuIcon,
   Zap as ZapIcon,
@@ -51,22 +52,30 @@ import {
   Building2,
   ClipboardList,
   ShieldCheck,
-  Wallet
+  Wallet,
+  LineChart
 } from 'lucide-react';
 
 // --- Logo Component ---
-const Logo = ({ className = "" }: { className?: string }) => (
-  <div className={`flex items-center gap-3 ${className}`}>
-    <div className="shrink-0">
-      <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 10 L90 85 H10 L50 10 Z" stroke="white" strokeWidth="8" />
-        <path d="M50 35 L70 75 H30 L50 35 Z" fill="white" />
-      </svg>
+const Logo = ({ className = "", showTagline = false }: { className?: string, showTagline?: boolean }) => (
+  <div className={`flex flex-col ${className}`}>
+    <div className="flex items-center gap-3">
+      <div className="shrink-0">
+        <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 10 L90 85 H10 L50 10 Z" stroke="white" strokeWidth="8" />
+          <path d="M50 35 L70 75 H30 L50 35 Z" fill="white" />
+        </svg>
+      </div>
+      <div className="flex flex-col leading-tight">
+        <span className="text-[26px] font-bold tracking-tight text-white leading-none">TRINEXISS</span>
+        <span className="text-[8.5px] font-black tracking-[0.45em] text-white/40 leading-none mt-1.5 uppercase">Technologies</span>
+      </div>
     </div>
-    <div className="flex flex-col leading-tight">
-      <span className="text-[26px] font-bold tracking-tight text-white leading-none">TRINEXISS</span>
-      <span className="text-[10px] font-bold tracking-[0.38em] text-white/50 leading-none mt-1">TECHNOLOGIES</span>
-    </div>
+    {showTagline && (
+      <div className="text-[7.5px] font-black text-brand-secondary/60 uppercase tracking-[0.3em] mt-2 whitespace-nowrap">
+        Neural Intelligence Systems for Next-Gen Enterprise
+      </div>
+    )}
   </div>
 );
 
@@ -86,16 +95,16 @@ const Navbar = ({ activeNav, onNavClick, onScheduleClick }: { activeNav: string,
     <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${isScrolled ? 'py-4 bg-brand-bg/95 backdrop-blur-xl border-b border-white/5' : 'py-8 bg-transparent'}`}>
       <div className="max-w-[1800px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         <button onClick={() => onNavClick('Home')} className="shrink-0 pointer-cursor">
-          <Logo />
+          <Logo showTagline={true} />
         </button>
 
         {/* Global Navigation Links - Always Horizontal */}
-        <div className="flex items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 ml-auto mr-4 lg:mr-10">
+         <div className="flex items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 ml-auto mr-4 lg:mr-10">
           {links.map((link) => (
             <button 
               key={link} 
               onClick={() => onNavClick(link)}
-              className={`text-[10px] sm:text-[12px] lg:text-[15px] font-medium transition-all cursor-pointer whitespace-nowrap ${activeNav === link ? 'text-brand-secondary' : 'text-white/90 hover:text-white'}`}
+              className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] transition-all cursor-pointer whitespace-nowrap ${activeNav === link ? 'text-brand-secondary' : 'text-white/60 hover:text-white'}`}
             >
               {link}
             </button>
@@ -104,9 +113,9 @@ const Navbar = ({ activeNav, onNavClick, onScheduleClick }: { activeNav: string,
 
         <button 
           onClick={onScheduleClick}
-          className="shrink-0 bg-brand-secondary text-[#03010c] font-bold px-4 py-2 sm:px-6 sm:py-2.5 lg:px-8 lg:py-3 rounded-[12px] text-[10px] sm:text-[12px] lg:text-[14px] hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-brand-secondary/20"
+          className="shrink-0 bg-white text-brand-bg font-black px-4 py-2 sm:px-6 sm:py-2.5 lg:px-8 lg:py-3 rounded-full text-[9px] sm:text-[10px] uppercase tracking-widest hover:bg-brand-secondary hover:text-white active:scale-95 transition-all shadow-xl shadow-white/5"
         >
-          Schedule a Demo
+          Consultation
         </button>
       </div>
     </nav>
@@ -331,6 +340,7 @@ const ServiceCard = ({
   iconText, 
   iconHover, 
   color,
+  image,
   onClick 
 }: any) => (
   <motion.div 
@@ -344,27 +354,38 @@ const ServiceCard = ({
       damping: 20
     }}
     onClick={onClick}
-    className={`glass p-10 rounded-[40px] border-white/5 group transition-all flex flex-col h-full bg-white/[0.02] ${clickable ? `cursor-pointer ${hoverBorder} hover:bg-white/[0.04] hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]` : ''}`}
+    className={`glass rounded-[40px] border-white/5 group transition-all flex flex-col h-full bg-white/[0.02] overflow-hidden ${clickable ? `cursor-pointer ${hoverBorder} hover:bg-white/[0.04] hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]` : ''}`}
   >
-    <div className={`w-16 h-16 ${iconBg} rounded-2xl flex items-center justify-center mb-8 border border-white/5 transition-all duration-500 ${clickable ? `${iconHover} group-hover:text-white` : ''}`}>
-      <Icon className={`w-8 h-8 ${iconText} group-hover:text-white transition-colors`} />
-    </div>
-    <h4 className="text-2xl font-bold mb-4 tracking-tight text-white">{title}</h4>
-    <p className="text-brand-text-body text-sm font-medium leading-relaxed mb-10 flex-grow">{desc}</p>
-    <ul className="space-y-3 pt-8 border-t border-brand-border">
-      {items.map((item: string, idx: number) => (
-        <li key={idx} className={`flex items-center gap-3 text-[10px] font-bold ${iconText} uppercase tracking-[0.1em]`}>
-           <div className={`w-1.5 h-1.5 ${color === 'brand-primary' ? 'bg-brand-primary' : 'bg-brand-secondary'} rounded-full shadow-[0_0_8px_#6C63FF]`} />
-           {item}
-        </li>
-      ))}
-    </ul>
-    {clickable && (
-      <div className="mt-10 flex items-center justify-between">
-         <span className={`${iconText} text-[10px] font-bold uppercase tracking-widest`}>Explore Deep Dive</span>
-         <ArrowRight className={`w-5 h-5 ${iconText} transform group-hover:translate-x-2 transition-transform`} />
+                <div className="h-48 relative overflow-hidden">
+                  <img 
+                    src={image} 
+                    alt={title} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100" 
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#03010c]/80 to-transparent" />
+                </div>
+    <div className="p-10 flex flex-col flex-grow">
+      <div className={`w-16 h-16 ${iconBg} rounded-2xl flex items-center justify-center mb-8 border border-white/5 transition-all duration-500 ${clickable ? `${iconHover} group-hover:text-white` : ''}`}>
+        <Icon className={`w-8 h-8 ${iconText} group-hover:text-white transition-colors`} />
       </div>
-    )}
+      <h4 className="text-2xl font-bold mb-4 tracking-tight text-white">{title}</h4>
+      <p className="text-brand-text-body text-sm font-medium leading-relaxed mb-10 flex-grow">{desc}</p>
+      <ul className="space-y-3 pt-8 border-t border-brand-border">
+        {items.map((item: string, idx: number) => (
+          <li key={idx} className={`flex items-center gap-3 text-[10px] font-bold ${iconText} uppercase tracking-[0.1em]`}>
+             <div className={`w-1.5 h-1.5 ${color === 'brand-primary' ? 'bg-brand-primary' : 'bg-brand-secondary'} rounded-full shadow-[0_0_8px_#6C63FF]`} />
+             {item}
+          </li>
+        ))}
+      </ul>
+      {clickable && (
+        <div className="mt-10 flex items-center justify-between">
+           <span className={`${iconText} text-[10px] font-bold uppercase tracking-widest`}>Explore Deep Dive</span>
+           <ArrowRight className={`w-5 h-5 ${iconText} transform group-hover:translate-x-2 transition-transform`} />
+        </div>
+      )}
+    </div>
   </motion.div>
 );
 
@@ -372,6 +393,7 @@ const services = [
   { 
     id: 'bot',
     title: 'AI & Automation', 
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800',
     icon: Bot, 
     desc: 'Custom Trinexiss Bots, Zapier/n8n workflows, and intelligent automation to streamline your business operations.',
     items: ['Trinexiss Bot Creation', 'Zapier & n8n Workflows', 'No-code Software Solutions'],
@@ -385,6 +407,7 @@ const services = [
   { 
     id: 'saas',
     title: 'SaaS Development', 
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
     icon: Globe, 
     desc: 'End-to-end SaaS application development featuring high-performance models like FinTrack and HealthSync.',
     items: ['FinTrack Financial Systems', 'HealthSync Patient Portals', 'Enterprise Dashboards'],
@@ -398,6 +421,7 @@ const services = [
   { 
     id: 'technical',
     title: 'Technical Services', 
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800',
     icon: CpuIcon, 
     desc: 'Comprehensive IT infrastructure, cloud management, and custom software engineering for modern enterprises.',
     items: ['IT Infrastructure Setup', 'Cloud Migration & Management', 'Custom Software Engineering'],
@@ -411,6 +435,7 @@ const services = [
   { 
     id: 'resourcing',
     title: 'Resourcing & Hiring', 
+    image: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80&w=800',
     icon: Users, 
     desc: 'Strategic talent acquisition and resource management to build high-performing technical teams.',
     items: ['Contractual & Permanent Staffing', 'Technical Talent Sourcing', 'Executive Search'],
@@ -424,6 +449,7 @@ const services = [
   { 
     id: 'hr',
     title: 'HR Services', 
+    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=800',
     icon: UserCheck, 
     desc: 'End-to-end human resource management, from onboarding to compliance and organizational development.',
     items: ['Employee Onboarding', 'HR Compliance & Policy', 'Performance Management'],
@@ -437,6 +463,7 @@ const services = [
   { 
     id: 'marketing',
     title: 'Digital Marketing', 
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
     icon: Megaphone, 
     desc: 'Performance-driven marketing strategies including SEO, PPC, and social media advertising.',
     items: ['Facebook & Google Ads', 'SEO Optimization', 'GTM & GA4 Setup'],
@@ -586,8 +613,183 @@ const ChatWidget = () => {
   );
 };
 
+// --- Interactive AI Hub Component ---
+const InteractiveHub = () => {
+  const [selectedNode, setSelectedNode] = useState<any>(null);
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+
+  const nodes = [
+    { id: 'bot', label: 'AI BOT', icon: Bot, desc: 'The central intelligence core coordinating all automated processes and decision-making logic.', color: 'from-purple-500 to-indigo-500', isCenter: true },
+    { id: 'data', label: 'DATA SOURCE', icon: Database, desc: 'Ingest data from diverse streams including databases, IoT sensors, and cloud storage.', color: 'from-violet-500 to-purple-600', angle: 0 },
+    { id: 'customer', label: 'CUSTOMER', icon: Users, desc: 'Advanced interaction layer for multi-channel customer engagement and support.', color: 'from-fuchsia-500 to-purple-500', angle: 45 },
+    { id: 'workflow', label: 'WORKFLOW', icon: Zap, desc: 'Dynamic automation sequences that execute complex business rules and logic.', color: 'from-indigo-500 to-violet-500', angle: 90 },
+    { id: 'analytics', label: 'ANALYTICS', icon: BarChart3, desc: 'Real-time performance metrics and predictive insights powered by neural models.', color: 'from-purple-400 to-indigo-600', angle: 135 },
+    { id: 'training', label: 'AI TRAINING', icon: Brain, desc: 'Continuous model improvement through reinforced learning and specialized datasets.', color: 'from-violet-600 to-fuchsia-600', angle: 180 },
+    { id: 'notifications', label: 'NOTIFICATIONS', icon: Megaphone, desc: 'Smart alert system with contextual triaging and multi-modal delivery.', color: 'from-indigo-400 to-purple-500', angle: 225 },
+    { id: 'security', label: 'SECURITY', icon: Shield, desc: 'Military-grade encryption and real-time threat detection across the entire stack.', color: 'from-purple-600 to-indigo-700', angle: 270 },
+    { id: 'processing', label: 'PROCESSING', icon: Cpu, desc: 'Ultra-fast compute nodes specializing in high-concurrency data transformation.', color: 'from-fuchsia-500 to-indigo-500', angle: 315 },
+  ];
+
+  const radius = 220;
+
+  return (
+    <div className="relative w-full aspect-square flex items-center justify-center" style={{ perspective: '2000px' }}>
+      {/* Background Glow */}
+      <div className="absolute inset-0 bg-purple-600/10 blur-[150px] rounded-full animate-pulse" />
+      
+      {/* 3D Container with Tilt */}
+      <motion.div 
+        animate={{ rotateY: [0, 8, 0], rotateX: [15, 20, 15] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        className="relative w-full h-full flex items-center justify-center transform-style-3d"
+      >
+        {/* Central Vertical Energy Stream */}
+        <div className="absolute h-[500px] w-px bg-gradient-to-b from-transparent via-purple-500/50 to-transparent blur-[1px]" />
+        <div className="absolute h-[500px] w-2 bg-gradient-to-b from-transparent via-purple-500/10 to-transparent blur-xl" />
+
+        {/* Connecting Lines Layer */}
+        <svg viewBox="0 0 1000 1000" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
+          <defs>
+            <linearGradient id="purpleBeam" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#A855F7" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#A855F7" stopOpacity="0.8" />
+            </linearGradient>
+          </defs>
+          {nodes.filter(n => !n.isCenter).map((node, i) => {
+            const rad = (node.angle! * Math.PI) / 180;
+            const x = Math.cos(rad) * radius;
+            const y = Math.sin(rad) * radius;
+            // Map our -220 to 220 coords to the 1000x1000 viewBox center (500, 500)
+            const xCoord = 500 + x;
+            const yCoord = 500 + y;
+            return (
+              <g key={i}>
+                <motion.line
+                  x1="500" y1="500"
+                  x2={xCoord}
+                  y2={yCoord}
+                  stroke="url(#purpleBeam)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4,4"
+                  className="opacity-30"
+                  animate={{ strokeDashoffset: [0, -20] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                />
+                <motion.circle 
+                  cx={xCoord} 
+                  cy={yCoord} 
+                  r="4" 
+                  fill="#A855F7" 
+                  animate={{ scale: [1, 2, 1], opacity: [0.3, 0.8, 0.3] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+                />
+              </g>
+            );
+          })}
+        </svg>
+
+        {/* Nodes */}
+        {nodes.map((node) => {
+          const rad = node.isCenter ? 0 : (node.angle! * Math.PI) / 180;
+          const x = node.isCenter ? 0 : Math.cos(rad) * radius;
+          const y = node.isCenter ? 0 : Math.sin(rad) * radius;
+
+          return (
+            <motion.div
+              key={node.id}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ 
+                opacity: 1, 
+                scale: hoveredNode === node.id ? 1.15 : 1,
+                x,
+                y,
+                z: node.isCenter ? 80 : (hoveredNode === node.id ? 120 : 0)
+              }}
+              transition={{ type: "spring", stiffness: 200, damping: 25 }}
+              onClick={() => setSelectedNode(node)}
+              onMouseEnter={() => setHoveredNode(node.id)}
+              onMouseLeave={() => setHoveredNode(null)}
+              className="absolute cursor-pointer z-20 group"
+            >
+              <div className={`relative p-0.5 rounded-2xl bg-gradient-to-tr ${node.color} shadow-[0_0_40px_rgba(168,85,247,0.3)]`}>
+                <div className={`bg-[#06041a]/95 backdrop-blur-xl rounded-[14px] ${node.isCenter ? 'p-8 min-w-[140px]' : 'p-4 min-w-[110px]'} flex flex-col items-center gap-2 border border-white/10 group-hover:border-purple-400 transition-all`}>
+                  <div className={`p-2 rounded-lg bg-white/5 text-purple-400 group-hover:scale-110 transition-transform`}>
+                    <node.icon className={node.isCenter ? "w-8 h-8" : "w-5 h-5"} />
+                  </div>
+                  <span className={`font-black tracking-widest text-white/50 uppercase group-hover:text-white transition-colors ${node.isCenter ? 'text-[12px]' : 'text-[8px]'}`}>
+                    {node.label}
+                  </span>
+                  {node.isCenter && (
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-purple-500 rounded-full animate-ping" />
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+
+        {/* Outer Orbitals */}
+        <motion.div 
+          animate={{ rotate: 360, rotateX: 65 }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="absolute w-[500px] h-[500px] border border-purple-500/10 rounded-full -z-10"
+        />
+        <motion.div 
+          animate={{ rotate: -360, rotateX: -65 }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          className="absolute w-[650px] h-[650px] border border-indigo-500/5 rounded-full -z-20"
+        />
+      </motion.div>
+
+      {/* Info Card Overlay */}
+      <AnimatePresence>
+        {selectedNode && (
+          <motion.div 
+            initial={{ opacity: 0, backdropBlur: "0px" }}
+            animate={{ opacity: 1, backdropBlur: "12px" }}
+            exit={{ opacity: 0, backdropBlur: "0px" }}
+            className="absolute inset-0 z-[100] flex items-center justify-center p-6 bg-black/40"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0a061e] border border-purple-500/40 p-8 rounded-[40px] shadow-[0_50px_150px_rgba(0,0,0,0.9)] max-w-sm w-full relative overflow-hidden group"
+            >
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-500" />
+              <button 
+                onClick={() => setSelectedNode(null)}
+                className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              <div className={`inline-flex p-5 rounded-2xl bg-gradient-to-tr ${selectedNode.color} text-white mb-8 shadow-2xl`}>
+                <selectedNode.icon className="w-8 h-8" />
+              </div>
+              
+              <h3 className="text-3xl font-black text-white italic uppercase tracking-tighter mb-4">{selectedNode.label}</h3>
+              <p className="text-purple-100/60 text-base font-medium leading-relaxed mb-10">
+                {selectedNode.desc}
+              </p>
+              
+              <button 
+                onClick={() => setSelectedNode(null)}
+                className="w-full py-5 bg-purple-600 hover:bg-purple-500 text-white font-black uppercase tracking-[0.3em] text-[11px] rounded-2xl transition-all active:scale-95 shadow-xl shadow-purple-900/40"
+              >
+                Close Systems
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 // --- Technical Diagrams for Use Cases ---
-  const FinTrackDiagram = () => (
+const FinTrackDiagram = () => (
   <div className="relative w-full aspect-video bg-brand-section rounded-3xl overflow-hidden border border-brand-border p-8 group">
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(108,99,255,0.05)_0%,transparent_70%)]" />
     <div className="absolute top-4 right-6 flex gap-2">
@@ -608,7 +810,10 @@ const ChatWidget = () => {
             transition={{ delay: i * 0.2 }}
             className={`w-16 h-16 rounded-2xl bg-brand-elevated border border-brand-border flex items-center justify-center ${step.color} shadow-2xl transition-all duration-500 group-hover:border-brand-primary/40`}
           >
-            <step.icon className="w-8 h-8" />
+              {(() => {
+                const Icon = step.icon;
+                return <Icon className="w-8 h-8" />;
+              })()}
           </motion.div>
           <div className="text-center space-y-1">
              <div className="text-[8px] font-black uppercase tracking-widest text-brand-text-body/40 leading-none">{step.label}</div>
@@ -635,15 +840,21 @@ const SupportAIDiagram = () => (
     <div className="relative z-10 flex flex-col justify-center gap-8 h-full">
       <div className="flex justify-between items-center px-12">
         <div className="flex flex-col items-center gap-2">
-           <div className="w-12 h-12 rounded-xl bg-brand-elevated flex items-center justify-center text-white"><Users className="w-6 h-6" /></div>
+           <div className="w-12 h-12 rounded-xl bg-brand-elevated flex items-center justify-center text-white">
+              <Users className="w-6 h-6" />
+           </div>
            <span className="text-[8px] font-black uppercase tracking-widest text-brand-text-body/30">User Query</span>
         </div>
         <div className="flex flex-col items-center gap-2">
-           <div className="w-12 h-12 rounded-xl bg-brand-primary/20 flex items-center justify-center text-brand-primary"><Bot className="w-6 h-6" /></div>
+           <div className="w-12 h-12 rounded-xl bg-brand-primary/20 flex items-center justify-center text-brand-primary">
+              <Bot className="w-6 h-6" />
+           </div>
            <span className="text-[8px] font-black uppercase tracking-widest text-brand-primary">Trinexiss Bot</span>
         </div>
         <div className="flex flex-col items-center gap-2">
-           <div className="w-12 h-12 rounded-xl bg-brand-elevated flex items-center justify-center text-brand-secondary"><CheckCircle2 className="w-6 h-6" /></div>
+           <div className="w-12 h-12 rounded-xl bg-brand-elevated flex items-center justify-center text-brand-secondary">
+              <CheckCircle2 className="w-6 h-6" />
+           </div>
            <span className="text-[8px] font-black uppercase tracking-widest text-brand-text-body/30">Resolution</span>
         </div>
       </div>
@@ -992,6 +1203,7 @@ const TeamSection = () => {
       name: "Shruti Chaskar",
       role: "CEO & Founder",
       category: "Leadership",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
       color: "text-brand-secondary",
       bg: "bg-brand-secondary/10",
       bio: "Visionary behind Trinexiss, driving innovation in AI and automation for over a decade with a mission to empower digital-first enterprises."
@@ -1000,6 +1212,7 @@ const TeamSection = () => {
       name: "Siddharth Sharma",
       role: "Lead Neural Architect",
       category: "Engineering",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
       color: "text-brand-primary",
       bg: "bg-brand-primary/10",
       bio: "Master of scalable AI infrastructures and distributed neural systems, ensuring technical excellence across all AI protocols."
@@ -1008,6 +1221,7 @@ const TeamSection = () => {
       name: "Vikram Malhotra",
       role: "SaaS Product Lead",
       category: "Product",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400",
       color: "text-brand-cyan",
       bg: "bg-brand-cyan/10",
       bio: "Architecting modern software solutions that solve complex enterprise logic with focus on scalability and global modernity."
@@ -1016,6 +1230,7 @@ const TeamSection = () => {
       name: "Ananya Iyer",
       role: "Head of Digital Growth",
       category: "Strategy",
+      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400",
       color: "text-purple-400",
       bg: "bg-purple-400/10",
       bio: "Driving global scale through ROI-focused digital performance marketing and data-centric growth frameworks."
@@ -1023,7 +1238,7 @@ const TeamSection = () => {
   ];
 
   return (
-    <section id="team" className="py-32 px-6 lg:px-24 relative overflow-hidden">
+    <section id="team" className="py-20 px-6 lg:px-24 relative overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-primary/5 blur-[120px] rounded-full pointer-events-none" />
       
       <div className="max-w-7xl mx-auto relative z-10">
@@ -1060,30 +1275,39 @@ const TeamSection = () => {
               whileHover={{ y: -8 }}
               className="group"
             >
-              <div className="glass p-8 rounded-[40px] border-brand-border hover:border-brand-primary/40 transition-all duration-500 h-full flex flex-col relative overflow-hidden bg-white/[0.01]">
-                {/* Status Dot */}
-                <div className="absolute top-8 right-8 w-1.5 h-1.5 rounded-full bg-brand-secondary animate-pulse" />
-                
-                <div className="mb-8">
-                  <div className={`inline-block px-3 py-1 rounded-full ${member.bg} ${member.color} text-[7px] font-black uppercase tracking-[0.2em] mb-6 border border-white/5`}>
-                    {member.category}
+              <div className="glass rounded-[40px] border-brand-border hover:border-brand-primary/40 transition-all duration-500 h-full flex flex-col relative overflow-hidden bg-white/[0.01]">
+                {/* Image Header */}
+                <div className="h-64 relative overflow-hidden">
+                  <img 
+                    src={member.image} 
+                    alt={member.name} 
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" 
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-bg via-transparent to-transparent opacity-80" />
+                  
+                  {/* Category Badge on Image */}
+                  <div className="absolute bottom-6 left-6">
+                    <div className={`px-3 py-1 rounded-full ${member.bg} ${member.color} text-[7px] font-black uppercase tracking-[0.2em] border border-white/5 backdrop-blur-md`}>
+                      {member.category}
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-black text-white mb-1 uppercase italic leading-none tracking-tighter group-hover:text-brand-secondary transition-colors">{member.name}</h3>
-                  <p className="text-white/30 font-bold text-[8px] uppercase tracking-[0.3em]">{member.role}</p>
                 </div>
-                
-                <div className="flex-1 flex flex-col justify-between">
+
+                <div className="p-8 flex-1 flex flex-col justify-between">
                   <div>
-                     <p className="text-brand-text-body/60 text-[10px] font-medium leading-relaxed mb-8">
-                        {member.bio}
-                     </p>
+                    <h3 className="text-2xl font-black text-white mb-1 uppercase italic leading-none tracking-tighter group-hover:text-brand-secondary transition-colors">{member.name}</h3>
+                    <p className="text-white/30 font-bold text-[8px] uppercase tracking-[0.3em] mb-6">{member.role}</p>
+                    <p className="text-brand-text-body/60 text-[10px] font-medium leading-relaxed mb-8">
+                      {member.bio}
+                    </p>
                   </div>
                   
                   <div className="pt-6 border-t border-white/5 flex items-center justify-between">
                     <div className="flex gap-2.5">
-                       <div className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-brand-primary transition-all cursor-pointer">
-                          <Users className="w-3.5 h-3.5" />
-                       </div>
+                       <a href="#" className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-brand-primary transition-all cursor-pointer">
+                          <Linkedin className="w-3.5 h-3.5" />
+                       </a>
                        <div className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-white/20 hover:text-white hover:bg-brand-secondary transition-all cursor-pointer">
                           <ArrowRight className="w-3.5 h-3.5" />
                        </div>
@@ -1402,11 +1626,11 @@ const CareersOverlay = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => v
                            )}
                         </button>
                      </form>
-                   )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                    )}
+                 </div>
+               </motion.div>
+             )}
+           </AnimatePresence>
 
           {/* Footer mini */}
           <footer className="py-12 px-6 text-center text-white/10 text-[8px] font-black uppercase tracking-[1em]">
@@ -1424,14 +1648,13 @@ export default function App() {
   const [activeDeepDive, setActiveDeepDive] = useState<'bot' | 'saas' | 'technical' | 'resourcing' | 'hr' | 'marketing' | null>(null);
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const [showCareers, setShowCareers] = useState(false);
+  const [contactSubmitted, setContactSubmitted] = useState(false);
 
   const handleNavClick = (link: string) => {
     setActiveNav(link);
     setActiveDeepDive(null);
     if (link === 'Careers') {
       setShowCareers(true);
-      // We keep activeNav 'Home' or whatever it was if careers is just an overlay?
-      // Actually the user wants sections. Let's treat Careers as a section if they click it.
     } else {
       setShowCareers(false);
     }
@@ -1484,7 +1707,8 @@ export default function App() {
               <img 
                 src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" 
                 alt="Digital Marketing"
-                className="rounded-[40px] border border-white/10 grayscale-0 group-hover:grayscale-0 transition-all shadow-2xl"
+                className="rounded-[40px] border border-white/10 transition-all shadow-2xl opacity-90 group-hover:opacity-100"
+                referrerPolicy="no-referrer"
               />
             </div>
           </div>
@@ -1530,8 +1754,9 @@ export default function App() {
         <div className="glass p-16 rounded-[60px] border-black/5 mb-40 relative overflow-hidden">
           <div className={`absolute top-0 right-0 w-64 h-64 bg-violet-400 opacity-5 blur-3xl`} />
           <div className={`${theme.accent} text-[10px] font-black uppercase tracking-[0.5em] mb-12 opacity-40`}>Real-World Example</div>
-          <div>
-            <h3 className="text-4xl font-bold uppercase mb-6 tracking-tighter text-slate-900">Google Ads & SEO — <span className={theme.accent}>e-commerce brand scaling from 0 to 10k monthly visitors</span></h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-4xl font-bold uppercase mb-6 tracking-tighter text-slate-900">Google Ads & SEO — <span className={theme.accent}>e-commerce brand scaling from 0 to 10k monthly visitors</span></h3>
             <p className="text-xl text-slate-500 font-medium mb-16 max-w-4xl">A new e-commerce brand had no online visibility and was struggling to generate sales. Here is exactly how our digital marketing strategy transformed their presence in 90 days:</p>
             
             <div className="flex flex-wrap items-center gap-6 text-slate-900">
@@ -1552,11 +1777,20 @@ export default function App() {
             </div>
 
             <div className="mt-20 bg-slate-50 border border-slate-100 p-10 rounded-3xl">
-               <div className={`text-[10px] font-black ${theme.accent} uppercase tracking-widest mb-4`}>Outcome — achieved in 90 days</div>
-               <p className="text-slate-900 text-lg font-medium italic leading-relaxed">
-                  "The brand grew from zero online presence to 10,000 monthly visitors, achieved a 3x return on ad spend, reduced cost per lead by 42%, and ranked on page one of Google for 15 target keywords — all within the first 90 days of the campaign."
-               </p>
-            </div>
+                <div className={`text-[10px] font-black ${theme.accent} uppercase tracking-widest mb-4`}>Outcome — achieved in 90 days</div>
+                <p className="text-slate-900 text-lg font-medium italic leading-relaxed">
+                   "The brand grew from zero online presence to 10,000 monthly visitors, achieved a 3x return on ad spend, reduced cost per lead by 42%, and ranked on page one of Google for 15 target keywords — all within the first 90 days of the campaign."
+                </p>
+             </div>
+           </div>
+           <div className="relative rounded-[40px] overflow-hidden border border-slate-200 shadow-2xl h-full min-h-[300px]">
+             <img 
+               src="https://images.unsplash.com/photo-1551288049-bbbda5366391?auto=format&fit=crop&q=80&w=1200" 
+               alt="Marketing Results" 
+               className="w-full h-full object-cover transition-all duration-700" 
+               referrerPolicy="no-referrer"
+             />
+           </div>
           </div>
         </div>
 
@@ -1641,7 +1875,8 @@ export default function App() {
               <img 
                 src="https://images.unsplash.com/photo-1521737706096-784826ae08b1?auto=format&fit=crop&q=80&w=1200" 
                 alt="HR Services"
-                className="rounded-[40px] border border-white/10 grayscale group-hover:grayscale-0 transition-all shadow-2xl"
+                className="rounded-[40px] border border-white/10 transition-all shadow-2xl opacity-90 group-hover:opacity-100"
+                referrerPolicy="no-referrer"
               />
             </div>
           </div>
@@ -1687,8 +1922,9 @@ export default function App() {
         <div className="glass p-16 rounded-[60px] border-white/5 mb-40 relative overflow-hidden">
           <div className={`absolute top-0 right-0 w-64 h-64 bg-sky-400 opacity-5 blur-3xl`} />
           <div className={`${theme.accent} text-[10px] font-black uppercase tracking-[0.5em] mb-12 opacity-40`}>Real-World Example</div>
-          <div>
-            <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">HR compliance & onboarding — <span className={theme.accent}>80-person company with no formal HR system</span></h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">HR compliance & onboarding — <span className={theme.accent}>80-person company with no formal HR system</span></h3>
             <p className="text-xl text-white/40 font-medium mb-16 max-w-4xl">A growing company had no structured HR processes — onboarding was inconsistent, policies were outdated, and payroll was managed manually via spreadsheets. Here is how we transformed their HR operations:</p>
             
             <div className="flex flex-wrap items-center gap-6 text-white">
@@ -1715,7 +1951,16 @@ export default function App() {
                </p>
             </div>
           </div>
+          <div className="relative rounded-[40px] overflow-hidden border border-white/10 shadow-2xl h-full min-h-[300px]">
+             <img 
+               src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800" 
+               alt="HR Collaboration" 
+               className="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" 
+               referrerPolicy="no-referrer"
+             />
+          </div>
         </div>
+      </div>
 
         {/* HR Services Grid (as requested in screenshot) */}
         <div className="mb-20">
@@ -1796,9 +2041,10 @@ export default function App() {
             <div className="relative group">
               <div className="absolute inset-0 bg-pink-400/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
               <img 
-                src="https://images.unsplash.com/photo-1521737706096-784826ae08b1?auto=format&fit=crop&q=80&w=1200" 
+                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=1200" 
                 alt="Resourcing"
-                className="rounded-[40px] border border-white/10 grayscale group-hover:grayscale-0 transition-all shadow-2xl"
+                className="rounded-[40px] border border-white/10 transition-all shadow-2xl opacity-90 group-hover:opacity-100"
+                referrerPolicy="no-referrer"
               />
             </div>
           </div>
@@ -1844,32 +2090,42 @@ export default function App() {
         <div className="glass p-16 rounded-[60px] border-white/5 mb-40 relative overflow-hidden">
           <div className={`absolute top-0 right-0 w-64 h-64 bg-pink-400 opacity-5 blur-3xl`} />
           <div className={`${theme.accent} text-[10px] font-black uppercase tracking-[0.5em] mb-12 opacity-40`}>Real-World Example</div>
-          <div>
-            <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">Technical talent sourcing — <span className={theme.accent}>scaling a fintech startup's engineering team</span></h3>
-            <p className="text-xl text-white/40 font-medium mb-16 max-w-4xl">A fast-growing fintech startup needed to hire 5 senior engineers within 3 weeks to meet a critical product launch deadline. Here is exactly how we delivered:</p>
-            
-            <div className="flex flex-wrap items-center gap-6 text-white">
-              {[
-                'Role briefing session',
-                'Network & sourcing',
-                'Technical screening',
-                'Client interviews',
-                '5 engineers placed'
-              ].map((step, idx) => (
-                <div key={idx} className="flex items-center gap-6">
-                  <div className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${idx === 4 ? `bg-pink-400 text-brand-bg border-pink-400` : 'border-white/10 text-white/40 font-black'}`}>
-                    {step}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">Technical talent sourcing — <span className={theme.accent}>scaling a fintech startup's engineering team</span></h3>
+              <p className="text-xl text-white/40 font-medium mb-16 max-w-4xl">A fast-growing fintech startup needed to hire 5 senior engineers within 3 weeks to meet a critical product launch deadline. Here is exactly how we delivered:</p>
+              
+              <div className="flex flex-wrap items-center gap-6 text-white">
+                {[
+                  'Role briefing session',
+                  'Network & sourcing',
+                  'Technical screening',
+                  'Client interviews',
+                  '5 engineers placed'
+                ].map((step, idx) => (
+                  <div key={idx} className="flex items-center gap-6">
+                    <div className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${idx === 4 ? `bg-pink-400 text-brand-bg border-pink-400` : 'border-white/10 text-white/40 font-black'}`}>
+                      {step}
+                    </div>
+                    {idx < 4 && <ArrowRight className="w-4 h-4 text-white/10" />}
                   </div>
-                  {idx < 4 && <ArrowRight className="w-4 h-4 text-white/10" />}
-                </div>
-              ))}
+                ))}
+              </div>
+              
+              <div className="mt-20 bg-black/40 border border-white/10 p-10 rounded-3xl">
+                <div className={`text-[10px] font-black ${theme.accent} uppercase tracking-widest mb-4`}>Outcome — delivered in 18 days</div>
+                <p className="text-white text-lg font-medium italic leading-relaxed">
+                   "All 5 senior engineers were sourced, screened, interviewed, and onboarded within 18 days — enabling the startup to hit their product launch deadline on time, with a high-performing team that remained fully retained at the 12-month mark."
+                </p>
+              </div>
             </div>
-
-            <div className="mt-20 bg-black/40 border border-white/10 p-10 rounded-3xl">
-               <div className={`text-[10px] font-black ${theme.accent} uppercase tracking-widest mb-4`}>Outcome — delivered in 18 days</div>
-               <p className="text-white text-lg font-medium italic leading-relaxed">
-                  "All 5 senior engineers were sourced, screened, interviewed, and onboarded within 18 days — enabling the startup to hit their product launch deadline on time, with a high-performing team that remained fully retained at the 12-month mark."
-               </p>
+            <div className="relative rounded-[40px] overflow-hidden border border-white/10 shadow-2xl h-full min-h-[300px]">
+               <img 
+                 src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=1200" 
+                 alt="Technical Hiring" 
+                 className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" 
+                 referrerPolicy="no-referrer"
+               />
             </div>
           </div>
         </div>
@@ -1956,7 +2212,8 @@ export default function App() {
               <img 
                 src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200" 
                 alt="Technical Services"
-                className="rounded-[40px] border border-white/10 grayscale group-hover:grayscale-0 transition-all shadow-2xl"
+                className="rounded-[40px] border border-white/10 transition-all shadow-2xl opacity-90 group-hover:opacity-100"
+                referrerPolicy="no-referrer"
               />
             </div>
           </div>
@@ -2002,32 +2259,42 @@ export default function App() {
         <div className="glass p-16 rounded-[60px] border-white/5 mb-40 relative overflow-hidden">
           <div className={`absolute top-0 right-0 w-64 h-64 bg-orange-400 opacity-5 blur-3xl`} />
           <div className={`${theme.accent} text-[10px] font-black uppercase tracking-[0.5em] mb-12 opacity-40`}>Real-World Example</div>
-          <div>
-            <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">Cloud migration — <span className={theme.accent}>mid-size enterprise moving from on-premise to AWS</span></h3>
-            <p className="text-xl text-white/40 font-medium mb-16 max-w-4xl">A 200-person company was running ageing on-premise servers causing frequent downtime and high maintenance costs. Here is how we migrated them to the cloud safely and efficiently:</p>
-            
-            <div className="flex flex-wrap items-center gap-6 text-white">
-              {[
-                'Infrastructure audit',
-                'Migration plan built',
-                'Data transferred to AWS',
-                'Systems tested & verified',
-                'Live with zero downtime'
-              ].map((step, idx) => (
-                <div key={idx} className="flex items-center gap-6">
-                  <div className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${idx === 4 ? `bg-orange-400 text-brand-bg border-orange-400` : 'border-white/10 text-white/40 font-black'}`}>
-                    {step}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">Cloud migration — <span className={theme.accent}>mid-size enterprise moving from on-premise to AWS</span></h3>
+              <p className="text-xl text-white/40 font-medium mb-16 max-w-4xl">A 200-person company was running ageing on-premise servers causing frequent downtime and high maintenance costs. Here is how we migrated them to the cloud safely and efficiently:</p>
+              
+              <div className="flex flex-wrap items-center gap-6 text-white">
+                {[
+                  'Infrastructure audit',
+                  'Migration plan built',
+                  'Data transferred to AWS',
+                  'Systems tested & verified',
+                  'Live with zero downtime'
+                ].map((step, idx) => (
+                  <div key={idx} className="flex items-center gap-6">
+                    <div className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${idx === 4 ? `bg-orange-400 text-brand-bg border-orange-400` : 'border-white/10 text-white/40 font-black'}`}>
+                      {step}
+                    </div>
+                    {idx < 4 && <ArrowRight className="w-4 h-4 text-white/10" />}
                   </div>
-                  {idx < 4 && <ArrowRight className="w-4 h-4 text-white/10" />}
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            <div className="mt-20 bg-black/40 border border-white/10 p-10 rounded-3xl">
-               <div className={`text-[10px] font-black ${theme.accent} uppercase tracking-widest mb-4`}>Outcome — completed in 3 weeks</div>
-               <p className="text-white text-lg font-medium italic leading-relaxed">
-                  "The company achieved 99.9% uptime, reduced IT infrastructure costs by 47%, eliminated hardware maintenance entirely, and gained real-time cloud monitoring — all with zero disruption to daily business operations during the migration."
-               </p>
+              <div className="mt-20 bg-black/40 border border-white/10 p-10 rounded-3xl">
+                <div className={`text-[10px] font-black ${theme.accent} uppercase tracking-widest mb-4`}>Outcome — completed in 3 weeks</div>
+                <p className="text-white text-lg font-medium italic leading-relaxed">
+                   "The company achieved 99.9% uptime, reduced IT infrastructure costs by 47%, eliminated hardware maintenance entirely, and gained real-time cloud monitoring — all with zero disruption to daily business operations during the migration."
+                </p>
+              </div>
+            </div>
+            <div className="relative rounded-[40px] overflow-hidden border border-white/10 shadow-2xl h-full min-h-[300px]">
+               <img 
+                 src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&q=80&w=1200" 
+                 alt="Infrastructure Migration" 
+                 className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" 
+                 referrerPolicy="no-referrer"
+               />
             </div>
           </div>
         </div>
@@ -2114,7 +2381,8 @@ export default function App() {
               <img 
                 src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200" 
                 alt="AI Bot Creation"
-                className="rounded-[40px] border border-white/10 grayscale group-hover:grayscale-0 transition-all shadow-2xl"
+                className="rounded-[40px] border border-white/10 transition-all shadow-2xl opacity-90 group-hover:opacity-100"
+                referrerPolicy="no-referrer"
               />
             </div>
           </div>
@@ -2160,8 +2428,9 @@ export default function App() {
         <div className="glass p-16 rounded-[60px] border-white/5 mb-40 relative overflow-hidden">
           <div className={`absolute top-0 right-0 w-64 h-64 bg-cyan-400 opacity-5 blur-3xl`} />
           <div className={`${theme.accent} text-[10px] font-black uppercase tracking-[0.5em] mb-12 opacity-40`}>Real-World Case Study</div>
-          <div>
-            <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">Customer support bot — <span className={theme.accent}>e-commerce store</span></h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">Customer support bot — <span className={theme.accent}>e-commerce store</span></h3>
             <p className="text-xl text-white/40 font-medium mb-16 max-w-4xl">A customer messages your store asking "Where is my order?" — here is exactly what the bot does automatically, in seconds:</p>
             
             <div className="flex flex-wrap items-center gap-6 text-white">
@@ -2188,7 +2457,16 @@ export default function App() {
                </p>
             </div>
           </div>
+          <div className="relative rounded-[40px] overflow-hidden border border-white/10 shadow-2xl h-full min-h-[300px]">
+             <img 
+               src="https://images.unsplash.com/photo-1531746790731-6c087fecd05a?auto=format&fit=crop&q=80&w=1200" 
+               alt="AI Support Bot" 
+               className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" 
+               referrerPolicy="no-referrer"
+             />
+          </div>
         </div>
+      </div>
 
         {/* Hero Diagram */}
         <div className="text-center mb-40">
@@ -2304,7 +2582,7 @@ export default function App() {
                       <img 
                         src="https://images.unsplash.com/photo-1551288049-bbbda5366391?auto=format&fit=crop&q=80&w=1200" 
                         alt="SaaS Development Architecture"
-                        className="rounded-[40px] border border-white/10 grayscale group-hover:grayscale-0 transition-all shadow-2xl"
+                        className="rounded-[40px] border border-white/10 transition-all shadow-2xl opacity-90 group-hover:opacity-100"
                         referrerPolicy="no-referrer"
                       />
                     </div>
@@ -2351,8 +2629,9 @@ export default function App() {
         <div className="glass p-16 rounded-[60px] border-white/5 mb-40 relative overflow-hidden shadow-xl">
           <div className={`absolute top-0 right-0 w-64 h-64 bg-emerald-400 opacity-5 blur-3xl`} />
           <div className={`${theme.accent} text-[10px] font-black uppercase tracking-[0.5em] mb-12 opacity-40`}>Real-World Case Study</div>
-          <div>
-            <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">Project management SaaS — <span className={theme.accent}>built for a growing startup</span></h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-4xl font-black italic uppercase mb-6 tracking-tighter text-white">Project management SaaS — <span className={theme.accent}>built for a growing startup</span></h3>
             <p className="text-xl text-white/40 font-medium mb-16 max-w-4xl">A startup needed a custom SaaS platform for their team to manage tasks, track progress, and collaborate in real time. Here is how we built and delivered it end-to-end:</p>
             
             <div className="flex flex-wrap items-center gap-6 text-white">
@@ -2379,7 +2658,16 @@ export default function App() {
                </p>
             </div>
           </div>
+          <div className="relative rounded-[40px] overflow-hidden border border-white/10 shadow-2xl h-full min-h-[300px]">
+             <img 
+               src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" 
+               alt="SaaS Platform" 
+               className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" 
+               referrerPolicy="no-referrer"
+             />
+          </div>
         </div>
+      </div>
 
         {/* Services Grid */}
         <div className="mb-20">
@@ -2425,7 +2713,7 @@ export default function App() {
         onScheduleClick={() => setIsConsultationOpen(true)} 
       />
 
-      <main className="pt-24 min-h-screen">
+      <main className="pt-20 min-h-screen">
         <AnimatePresence mode="wait">
           {activeNav === 'Home' && (
             <motion.div
@@ -2436,8 +2724,8 @@ export default function App() {
               transition={{ duration: 0.5 }}
             >
               {/* --- HERO SECTION --- */}
-              <section id="home" className="relative min-h-screen flex items-center px-6 lg:px-24 pt-32 pb-24 overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(88,101,242,0.08)_0%,transparent_50% preview)] pointer-events-none" />
+              <section id="home" className="relative h-auto flex items-center px-6 lg:px-24 pt-12 pb-6 overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(88,101,242,0.08)_0%,transparent_50%_)] pointer-events-none" />
                 
                 <div className="max-w-[1600px] mx-auto w-full">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -2448,108 +2736,43 @@ export default function App() {
                       transition={{ duration: 0.8 }}
                       className="lg:col-span-7 flex flex-col"
                     >
-                      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/5 w-fit mb-10">
-                        <Zap className="w-3.5 h-3.5 text-brand-secondary" />
-                        <span className="text-[10px] font-black text-brand-secondary tracking-[0.2em] uppercase">Empowering Women in Tech</span>
+                      <div className="flex flex-wrap items-center gap-6 mb-4">
+                         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/5 w-fit">
+                           <Zap className="w-3.5 h-3.5 text-brand-secondary" />
+                           <span className="text-[10px] font-black text-brand-secondary tracking-[0.2em] uppercase">Empowering Women in Tech</span>
+                         </div>
                       </div>
                       
-                      <div className="flex flex-col gap-6 mb-10">
-                        <h1 className="text-5xl md:text-8xl font-black leading-[0.8] tracking-tighter text-white uppercase italic text-glow">
-                          AI-Powered <br />
-                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-secondary font-black">Automation</span> <br /> 
-                          & Growth
+                      <div className="flex flex-col mb-3">
+                        <h1 className="text-4xl md:text-6xl font-black leading-[0.9] tracking-tighter text-white uppercase italic text-glow">
+                          Autonomous <span className="text-brand-primary">AI</span> <br />
+                          Systems & Strategy
                         </h1>
                       </div>
                       
-                      <p className="text-lg md:text-xl text-brand-text-body max-w-xl font-medium leading-relaxed mb-10">
-                        Trinexiss Technologies is a <span className="text-white font-bold decoration-brand-primary decoration-4 underline-offset-4">women-led</span> innovation hub helping enterprises scale with custom AI agents and automated workflows.
+                      <p className="text-lg md:text-xl text-brand-text-body max-w-xl font-medium leading-relaxed mb-6">
+                        Architecting high-performance neural workflows for global enterprises through a unique <span className="text-white font-bold decoration-brand-primary decoration-4 underline-offset-4">women-led</span> engineering model.
                       </p>
                       
                       <div className="flex flex-wrap gap-5">
-                        <button 
-                          onClick={() => setIsConsultationOpen(true)}
-                          className="btn-primary"
-                        >
-                          Schedule Consultation
-                        </button>
-                        <button 
-                          onClick={() => handleNavClick('Team')}
-                          className="bg-white/[0.03] border border-white/10 text-white font-bold px-10 py-4 rounded-full text-xs uppercase tracking-[0.2em] hover:bg-white/10 transition-all active:scale-95"
-                        >
-                          Meet Our Team
-                        </button>
-                      </div>
+                         <button 
+                           onClick={() => setIsConsultationOpen(true)}
+                           className="btn-primary"
+                         >
+                           Request Consultation
+                         </button>
+                       </div>
                     </motion.div>
 
-                    {/* Right Extra Decorative Space - Now with Big 3D Image */}
+                    {/* Right Column - Interactive 3D Hub */}
                     <div className="hidden lg:col-span-5 lg:flex justify-center items-center relative">
                        <motion.div 
                         initial={{ opacity: 0, x: 50, rotateY: -20, scale: 0.9 }}
                         animate={{ opacity: 1, x: 0, rotateY: -10, scale: 1 }}
-                        whileHover={{ rotateY: 0, rotateX: 5, scale: 1.02 }}
                         transition={{ duration: 1.5, ease: "easeOut" }}
-                        className="relative w-full aspect-[4/5] max-w-[500px]"
-                        style={{ perspective: '2000px', transformStyle: 'preserve-3d' }}
+                        className="relative w-full max-w-[650px]"
                        >
-                          {/* Main 3D Card Container */}
-                          <motion.div
-                            animate={{ 
-                               y: [0, -15, 0],
-                               rotateX: [0, 1, 0],
-                               rotateY: [-5, -2, -5]
-                            }}
-                            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                            className="relative w-full h-full glass border-white/10 rounded-[60px] p-3 overflow-hidden shadow-[0_80px_150px_rgba(37,99,235,0.3)] group"
-                            style={{ transformStyle: 'preserve-3d' }}
-                          >
-                            <img 
-                              src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200" 
-                              alt="Neural AI Intelligence" 
-                              className="w-full h-full object-cover rounded-[48px] brightness-110 contrast-110 active:scale-95 transition-all duration-500 group-hover:scale-105"
-                              referrerPolicy="no-referrer"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-tr from-[#03010c]/80 via-transparent to-brand-primary/20 opacity-60" />
-                            
-                            {/* Inner Highlight HUD */}
-                            <div className="absolute inset-8 border-2 border-white/5 rounded-[40px] pointer-events-none" style={{ transform: 'translateZ(20px)' }} />
-                            
-                            {/* Floating Stats Label */}
-                            <motion.div 
-                              animate={{ 
-                                y: [0, 10, 0],
-                                x: [0, 5, 0]
-                              }}
-                              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                              className="absolute bottom-12 left-12 bg-white/5 backdrop-blur-2xl p-6 rounded-[32px] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
-                              style={{ transform: 'translateZ(60px)' }}
-                            >
-                               <div className="text-[10px] font-black text-brand-secondary uppercase tracking-[0.2em] mb-1">Neural Core</div>
-                               <div className="text-3xl font-black text-white italic">Active</div>
-                               <div className="mt-2 flex gap-1">
-                                 {[1, 2, 3, 4].map(i => (
-                                   <div key={i} className="w-1 h-3 bg-brand-primary/50 rounded-full animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
-                                 ))}
-                               </div>
-                            </motion.div>
-
-                            {/* Top Floating Badge */}
-                            <motion.div 
-                              animate={{ y: [0, -10, 0] }}
-                              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                              className="absolute top-12 right-12 bg-brand-primary/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10"
-                              style={{ transform: 'translateZ(40px)' }}
-                            >
-                               <span className="text-[9px] font-bold text-white uppercase tracking-widest whitespace-nowrap">Quantum Compute v2.0</span>
-                            </motion.div>
-                          </motion.div>
-
-                          {/* Orbiting Ring */}
-                          <motion.div 
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                            className="absolute -inset-20 border border-white/5 rounded-full -z-10"
-                          />
-                          <div className="absolute -inset-20 bg-[radial-gradient(circle_at_center,rgba(88,101,242,0.15)_0%,transparent_70%)] -z-20 blur-3xl opacity-50" />
+                          <InteractiveHub />
                        </motion.div>
                     </div>
                   </div>
@@ -2557,7 +2780,7 @@ export default function App() {
               </section>
 
               {/* --- STATS SECTION --- */}
-              <section className="py-24 border-y border-white/5 bg-white/[0.01]">
+              <section className="py-8 border-y border-white/5 bg-white/[0.01]">
                 <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-12 text-white">
                   <Counter value={50} label="Partners" suffix="+" />
                   <Counter value={98} label="Success rate" suffix="%" />
@@ -2566,21 +2789,115 @@ export default function App() {
                 </div>
               </section>
 
-              {/* Quick Services Preview for Home Page */}
-              <section className="py-32 px-6">
+              {/* WHY TRINEXISS SECTION */}
+              <section className="py-10 md:py-12 px-6 overflow-hidden">
                 <div className="max-w-7xl mx-auto">
-                   <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-24">
-                      <div>
-                        <div className="text-brand-primary text-xs font-black uppercase tracking-[0.4em] mb-4">Core Expertise</div>
-                        <h2 className="text-5xl md:text-7xl font-black tracking-tighter italic uppercase leading-none text-white">Our Leading <br /><span className="text-brand-secondary">Solutions</span></h2>
-                      </div>
-                      <button 
-                        onClick={() => handleNavClick('Services')}
-                        className="text-white/40 hover:text-brand-secondary font-black uppercase tracking-widest text-[10px] border-b border-white/10 pb-2 transition-all"
-                      >
-                        View All Services →
-                      </button>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <div className="flex flex-col gap-10">
+                       <div>
+                          <div className="inline-block px-4 py-1.5 rounded-full border border-brand-secondary/20 bg-brand-secondary/5 text-brand-secondary text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+                             Partner with Excellence
+                          </div>
+                          <h2 className="text-5xl md:text-7xl font-black tracking-tighter italic uppercase leading-tight text-white mb-4">
+                             Why Trinexiss is Your <br />
+                             <span className="text-brand-primary">Ideal Technology Partner</span>
+                          </h2>
+                          <p className="text-brand-text-body text-lg leading-relaxed max-w-xl mb-8">
+                             We don't just build software; we architect growth. Our approach combines technical excellence with deep business intelligence to ensure your enterprise stays ahead.
+                          </p>
+                       </div>
+                       
+                       <div className="space-y-8">
+                          {[
+                            { icon: Zap, title: 'AI-First Approach', desc: 'We integrate intelligence into every workflow.' },
+                            { icon: Globe, title: 'Women-Led Excellence', desc: 'Diverse perspectives driving superior innovation.' },
+                            { icon: ShieldCheck, title: 'Enterprise Security', desc: 'Your data is protected by industry-leading standards.' }
+                          ].map((item, idx) => (
+                            <div key={idx} className="flex gap-6 group">
+                               <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-brand-secondary group-hover:bg-brand-secondary group-hover:text-brand-bg transition-all duration-500">
+                                  <item.icon className="w-6 h-6" />
+                                </div>
+                               <div>
+                                  <h4 className="text-xl font-bold text-white mb-1">{item.title}</h4>
+                                  <p className="text-brand-text-body/60 text-xs leading-relaxed">{item.desc}</p>
+                               </div>
+                            </div>
+                          ))}
+                       </div>
+                    </div>
+
+                    <div className="relative group lg:order-last">
+                       <div className="absolute -inset-4 bg-brand-primary/20 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity" />
+                       
+                       {/* Interactive Explanations adjacent to image - positioned on the left side */}
+                       <motion.div 
+                         initial={{ x: -20, opacity: 0 }}
+                         whileInView={{ x: 0, opacity: 1 }}
+                         transition={{ delay: 0.3 }}
+                         className="absolute top-1/4 -left-6 xl:-left-12 glass p-5 rounded-2xl border-white/10 max-w-[190px] hidden xl:block shadow-2xl z-30 transform -translate-x-1/2"
+                       >
+                          <div className="text-brand-secondary text-[10px] font-black uppercase tracking-widest mb-1.5">Human-Centric</div>
+                          <p className="text-white/40 text-[10px] leading-tight font-medium">Empowering teams with custom intuitive automation interfaces.</p>
+                       </motion.div>
+
+                       <motion.div 
+                         initial={{ x: -20, opacity: 0 }}
+                         whileInView={{ x: 0, opacity: 1 }}
+                         transition={{ delay: 0.5 }}
+                         className="absolute bottom-1/4 -left-6 xl:-left-12 glass p-5 rounded-2xl border-white/10 max-w-[190px] hidden xl:block shadow-2xl z-30 transform -translate-x-1/2"
+                       >
+                          <div className="text-brand-primary text-[10px] font-black uppercase tracking-widest mb-1.5">Elite Logic</div>
+                          <p className="text-white/40 text-[10px] leading-tight font-medium">Sound expertise in autonomous agents and neural engineering.</p>
+                       </motion.div>
+
+                       <div className="relative rounded-[60px] overflow-hidden border border-white/10 aspect-[4/3] shadow-2xl">
+                          <img 
+                            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200" 
+                            alt="Innovation Team" 
+                            className="w-full h-full object-cover grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-1000"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-brand-bg/90 via-transparent to-transparent" />
+                          
+                          {/* Experience Badge */}
+                          <motion.div 
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            whileInView={{ scale: 1, opacity: 1 }}
+                            className="absolute bottom-10 left-10 p-8 glass-dark rounded-3xl border-brand-primary/20 backdrop-blur-2xl z-20"
+                          >
+                             <div className="text-4xl font-black text-brand-secondary italic mb-1">10+</div>
+                             <div className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40">Years of Experience</div>
+                          </motion.div>
+                       </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Quick Services Preview for Home Page */}
+              <section id="services" className="py-20 px-6 bg-white/[0.01] relative overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-primary/5 blur-[120px] rounded-full pointer-events-none" />
+                <div className="max-w-7xl mx-auto relative z-10">
+                   <div className="text-center mb-24">
+                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/5 mb-6">
+                        <Cpu className="w-3.5 h-3.5 text-brand-secondary" />
+                        <span className="text-[10px] font-black text-brand-secondary tracking-[0.4em] uppercase italic">Service Spectrum</span>
+                     </div>
+                     <h2 className="text-5xl md:text-8xl font-black tracking-tighter italic uppercase leading-[0.85] text-white mb-8">
+                       Our Core <span className="text-brand-primary">AI</span> <br />
+                       Expertise
+                     </h2>
+                     <p className="text-brand-text-body text-[16px] font-medium leading-relaxed max-w-2xl mx-auto italic opacity-50 mb-10">
+                       Deploying precision-engineered automation and high-performance neural architectures for the modern global enterprise.
+                     </p>
+                     <button 
+                       onClick={() => handleNavClick('Services')}
+                       className="px-8 py-3 rounded-full bg-white/[0.03] border border-white/10 text-white/50 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white/5 hover:text-white transition-all active:scale-95 mx-auto block mb-20"
+                     >
+                       Explore Systems Catalog →
+                     </button>
                    </div>
+                   
                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                       {services.slice(0, 3).map((service, i) => (
                         <ServiceCard key={i} {...service} onClick={() => { setActiveDeepDive(service.id as any); handleNavClick('Services'); }} />
@@ -2590,7 +2907,7 @@ export default function App() {
               </section>
 
               {/* Content Trust / Featured Section */}
-              <section className="py-32 px-6 bg-white/[0.02] border-y border-white/5">
+              <section className="py-20 px-6 bg-white/[0.02] border-y border-white/5">
                 <div className="max-w-7xl mx-auto text-center">
                    <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-12 italic uppercase text-white">Trusted by Industry Leaders</h2>
                    <div className="flex flex-wrap justify-center gap-12 opacity-30 grayscale hover:grayscale-0 transition-all">
@@ -2722,9 +3039,21 @@ export default function App() {
                          ))}
                       </div>
                    </div>
-                   <div className={`relative ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
-                      <caseStudy.diagram />
-                      <div className="absolute -bottom-6 -right-6 glass p-6 border-brand-border rounded-2xl flex items-center gap-4 bg-brand-bg shadow-xl">
+                   <div className={`relative ${i % 2 === 1 ? 'lg:order-1' : ''} rounded-[48px] overflow-hidden border border-white/5`}>
+                      <img 
+                        src={caseStudy.image} 
+                        alt={caseStudy.title} 
+                        className="absolute inset-0 w-full h-full object-cover opacity-20 grayscale" 
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-br from-brand-bg/80 to-transparent" />
+                      <div className="relative p-12 min-h-[400px] flex items-center justify-center">
+                        {(() => {
+                           const Diagram = caseStudy.diagram;
+                           return <Diagram />;
+                        })()}
+                      </div>
+                      <div className="absolute -bottom-6 -right-6 glass p-6 border-brand-border rounded-2xl flex items-center gap-4 bg-brand-bg shadow-xl scale-75">
                          <div className="w-2 h-2 bg-brand-secondary rounded-full animate-pulse" />
                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">System Active</span>
                       </div>
@@ -2745,42 +3074,59 @@ export default function App() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
             >
-              {/* --- AI USE CASES & SUCCESS STORIES --- */}
-      <section id="use-cases" className="py-32 px-6 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
-            <div className="text-brand-secondary text-xs font-black uppercase tracking-[0.4em] mb-4">Real-World Impact</div>
-            <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 italic text-white">AI Use Cases & <span className="text-brand-secondary">Success Stories</span></h2>
-            <p className="text-xl text-brand-text-body max-w-3xl mx-auto font-medium uppercase tracking-tight leading-relaxed">
-              Discover how Trinexiss Technologies leverages cutting-edge AI to solve complex business challenges across diverse industries.
-            </p>
-          </div>
+              {/* --- AI USE CASES SECTION --- */}
+              <section id="use-cases" className="py-16 px-6 relative overflow-hidden">
+                <div className="max-w-7xl mx-auto">
+                  <div className="text-center mb-16">
+                    <div className="text-brand-secondary text-[10px] font-black uppercase tracking-[0.5em] mb-4">Neural Logic</div>
+                    <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 italic text-white uppercase leading-none">AI <span className="text-brand-secondary">Use Cases</span></h2>
+                    <p className="text-xl text-brand-text-body max-w-3xl mx-auto font-medium leading-relaxed italic opacity-60">
+                      Precision-engineered solutions for complex business architectures.
+                    </p>
+                  </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {[
               {
                 industry: "Retail & E-Commerce",
                 title: "E-Commerce Personalization",
                 icon: ShoppingCart,
+                image: "https://images.unsplash.com/photo-1556742049-dfda66f0e217?auto=format&fit=crop&q=80&w=1200",
+                diagram: SupportAIDiagram,
                 impact: "How we helped a fashion retailer increase conversion by 35% using AI-driven product recommendations and automated customer support.",
                 challenge: "High cart abandonment rates and overwhelmed support teams during peak seasons.",
                 solution: "Implemented a custom Trinexiss Bot that provides personalized styling advice and handles 80% of routine inquiries.",
                 results: ["35% Increase in Conversion", "60% Reduction in Support Costs", "92% Customer Satisfaction"]
               },
               {
-                industry: "HR & Staffing",
-                title: "AI-Driven Recruitment",
-                icon: Briefcase,
-                impact: "Streamlining the hiring process for a global tech firm by automating resume screening and initial candidate engagement.",
-                challenge: "Processing 5,000+ applications monthly with a small HR team.",
-                solution: "Developed an AI workflow that screens candidates based on technical skills and soft-skill alignment.",
-                results: ["75% Faster Time-to-Hire", "40% Lower Cost-per-Hire", "Bias-Free Initial Screening"]
+                industry: "Finance & B2B",
+                title: "Predictive Analytics",
+                icon: TrendingUp,
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
+                diagram: FinTrackDiagram,
+                impact: "Empowering a B2B SaaS company to predict churn and identify upsell opportunities with 90% accuracy.",
+                challenge: "Low visibility into customer behavior and high churn rates.",
+                solution: "Deployed a neural model that analyzes usage patterns and flags at-risk accounts in real-time.",
+                results: ["90% Accuracy in Churn Prediction", "25% Increase in Upsell Revenue", "15% Improvement in LTV"]
               },
               {
-                industry: "Finance & B2B",
-                title: "Predictive Sales Analytics",
-                icon: TrendingUp,
-                impact: "Empowering a B2B SaaS company to predict churn and identify upsell opportunities with 90% accuracy.",
+                industry: "Healthcare",
+                title: "HealthSync Portal",
+                icon: Activity,
+                image: "https://images.unsplash.com/photo-1576091160550-217359f4ecf8?auto=format&fit=crop&q=80&w=800",
+                diagram: HealthSyncDiagram,
+                impact: "Modernising patient portals for a multi-specialty clinic to improve engagement and care coordination.",
+                challenge: "Clunky legacy patient portals with low adoption and poor user experience.",
+                solution: "Built a high-performance patient portal with real-time sync, secure messaging, and automated scheduling.",
+                results: ["50% Increase in Portal Adoption", "30% Fewer Missed Appointments", "HIPAA Compliant Security"]
+              },
+              {
+                industry: "Data Services",
+                title: "Neural Analytics Hub",
+                icon: Database,
+                image: "https://images.unsplash.com/photo-1551288049-bbbda5366391?auto=format&fit=crop&q=80&w=800",
+                diagram: InteractiveHub,
+                impact: "Centralizing fragmented data across multiple platforms to enable real-time behavior prediction and business intelligence.",
                 challenge: "Fragmented data across multiple platforms making it impossible to predict customer behavior.",
                 solution: "Centralized data into a custom dashboard with machine learning models for behavior prediction.",
                 results: ["20% Reduction in Churn", "15% Increase in Upsell Revenue", "Real-time Decision Dashboards"]
@@ -2789,6 +3135,8 @@ export default function App() {
                 industry: "Customer Service",
                 title: "24/7 Intelligent Support",
                 icon: Headset,
+                image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&q=80&w=800",
+                diagram: SupportAIDiagram,
                 impact: "Transforming customer experience for a logistics provider with multilingual Trinexiss Bots available around the clock.",
                 challenge: "Inconsistent support quality across different time zones and languages.",
                 solution: "Deployed advanced LLM-based Trinexiss Bots capable of handling complex logistics queries in 12 languages.",
@@ -2808,45 +3156,66 @@ export default function App() {
                   stiffness: 260,
                   damping: 20
                 }}
-                className="glass p-10 rounded-[48px] border-brand-border relative group hover:border-brand-secondary/40 hover:shadow-[0_20px_60px_rgba(56,189,248,0.15)] transition-all flex flex-col h-full bg-white/[0.02]"
+                className="glass rounded-[48px] border-brand-border relative group hover:border-brand-secondary/40 hover:shadow-[0_20px_60px_rgba(56,189,248,0.15)] transition-all flex flex-col h-full bg-white/[0.02] overflow-hidden"
               >
-                {/* Industry Tag */}
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 rounded-2xl bg-brand-secondary/10 flex items-center justify-center text-brand-secondary">
-                    <useCase.icon className="w-6 h-6" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-brand-secondary uppercase tracking-[0.3em]">{useCase.industry}</span>
-                    <h3 className="text-2xl font-bold text-white tracking-tight leading-none mt-1">{useCase.title}</h3>
-                  </div>
-                </div>
-
-                <p className="text-brand-text-body font-medium leading-relaxed mb-10 text-lg">
-                  "{useCase.impact}"
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 flex-grow">
-                  <div className="space-y-3">
-                    <h4 className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">The Challenge</h4>
-                    <p className="text-brand-text-body text-sm font-medium leading-relaxed">{useCase.challenge}</p>
-                  </div>
-                  <div className="space-y-3">
-                    <h4 className="text-[10px] font-black text-brand-secondary uppercase tracking-[0.4em]">The Solution</h4>
-                    <p className="text-brand-text-body text-sm font-medium leading-relaxed">{useCase.solution}</p>
-                  </div>
-                </div>
-
-                {/* Results Grid */}
-                <div className="space-y-4 pt-8 border-t border-brand-border">
-                  <h4 className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">Key Results</h4>
-                  <div className="flex flex-wrap gap-3">
-                    {useCase.results.map((result, idx) => (
-                      <div key={idx} className="bg-brand-secondary/5 border border-brand-secondary/20 rounded-full px-4 py-2 flex items-center gap-2">
-                        <Check className="w-3 h-3 text-brand-secondary" />
-                        <span className="text-[10px] font-black text-brand-secondary uppercase tracking-widest">{result}</span>
+                {/* Use Case Image / Diagram */}
+                <div className="h-64 relative overflow-hidden bg-brand-bg group-hover:bg-brand-bg/40 transition-colors">
+                   <img 
+                       src={useCase.image} 
+                       alt={useCase.title} 
+                       className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 opacity-70 group-hover:opacity-90" 
+                       referrerPolicy="no-referrer"
+                   />
+                   {useCase.diagram && (
+                      <div className="absolute inset-0 flex items-center justify-center p-8 pointer-events-none group-hover:scale-110 transition-transform duration-700">
+                         {(() => {
+                           const Diagram = useCase.diagram;
+                           return <Diagram />;
+                         })()}
                       </div>
-                    ))}
-                  </div>
+                   )}
+                   <div className="absolute inset-0 bg-gradient-to-t from-brand-bg to-transparent opacity-80" />
+                </div>
+                
+                <div className="p-10 pt-6 flex flex-col flex-grow">
+                   {/* Industry Tag */}
+                   <div className="flex items-center gap-3 mb-6">
+                     <div className="w-10 h-10 rounded-xl bg-brand-secondary/10 flex items-center justify-center text-brand-secondary">
+                       <useCase.icon className="w-5 h-5" />
+                     </div>
+                     <div className="flex flex-col">
+                       <span className="text-[9px] font-bold text-brand-secondary uppercase tracking-[0.3em]">{useCase.industry}</span>
+                       <h3 className="text-xl font-bold text-white tracking-tight leading-none mt-0.5">{useCase.title}</h3>
+                     </div>
+                   </div>
+
+                   <p className="text-brand-text-body font-medium leading-relaxed mb-6 text-base">
+                     "{useCase.impact}"
+                   </p>
+
+                   <div className="grid grid-cols-1 gap-6 mb-8 flex-grow">
+                     <div className="space-y-2">
+                       <h4 className="text-[9px] font-black text-white/20 uppercase tracking-[0.4em]">The Challenge</h4>
+                       <p className="text-brand-text-body text-xs font-medium leading-relaxed">{useCase.challenge}</p>
+                     </div>
+                     <div className="space-y-2">
+                       <h4 className="text-[9px] font-black text-brand-secondary uppercase tracking-[0.4em]">The Solution</h4>
+                       <p className="text-brand-text-body text-xs font-medium leading-relaxed">{useCase.solution}</p>
+                     </div>
+                   </div>
+
+                   {/* Results Grid */}
+                   <div className="space-y-4 pt-6 border-t border-brand-border">
+                     <h4 className="text-[9px] font-black text-white/20 uppercase tracking-[0.4em]">Key Results</h4>
+                     <div className="flex flex-wrap gap-2">
+                       {useCase.results.map((result, idx) => (
+                         <div key={idx} className="bg-brand-secondary/5 border border-brand-secondary/20 rounded-full px-3 py-1.5 flex items-center gap-2">
+                           <Check className="w-2.5 h-2.5 text-brand-secondary" />
+                           <span className="text-[8px] font-black text-brand-secondary uppercase tracking-widest">{result}</span>
+                         </div>
+                       ))}
+                     </div>
+                   </div>
                 </div>
               </motion.div>
             ))}
@@ -2855,9 +3224,9 @@ export default function App() {
       </section>
 
       {/* --- PORTFOLIO SECTION --- */}
-      <section id="portfolio" className="py-32 px-6 relative border-t border-brand-border">
+      <section id="portfolio" className="py-16 px-6 relative border-t border-brand-border">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
+          <div className="text-center mb-16">
             <div className="text-brand-primary text-xs font-bold uppercase tracking-[0.4em] mb-4">Our Portfolio</div>
             <h2 className="text-5xl md:text-6xl font-black tracking-tighter mb-6 text-white">Showcasing Our <span className="text-brand-primary text-glow">Impact.</span></h2>
             <p className="text-xl text-brand-text-body max-w-2xl mx-auto font-medium leading-relaxed">Pioneering digital excellence through rigorous engineering and strategic innovation.</p>
@@ -2997,7 +3366,7 @@ export default function App() {
               </section>
 
               {/* --- Our Story (Image 2 style) --- */}
-              <section id="our-story" className="px-6 lg:px-24 py-20 relative z-10">
+              <section id="our-story" className="px-6 lg:px-24 py-16 relative z-10">
                 <div className="max-w-[1800px] mx-auto">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center">
                     {/* Image Column with 3D Effect */}
@@ -3147,16 +3516,16 @@ export default function App() {
               <Floating3DShapes />
               
               {/* --- BLOG SECTION --- */}
-      <section id="blog" className="py-32 px-6 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-24">
-            <div className="max-w-3xl">
-              <div className="text-brand-secondary text-xs font-black uppercase tracking-[0.4em] mb-6 text-glow">Intelligence Feed</div>
-              <h1 className="text-6xl md:text-8xl font-black tracking-tighter italic uppercase leading-none text-white mb-8">Our <span className="text-brand-secondary text-glow">Blog</span></h1>
-              <p className="text-white/90 text-xl md:text-2xl font-medium max-w-2xl leading-relaxed">Insights, trends, and thought leadership from the experts at Trinexiss.</p>
-            </div>
-            <button className="text-brand-secondary border-b-2 border-brand-secondary/20 pb-2 text-[10px] font-black uppercase tracking-[0.3em] hover:border-brand-secondary transition-all">View All Intelligence</button>
-          </div>
+              <section id="blog" className="py-20 px-6 relative z-10">
+                <div className="max-w-7xl mx-auto">
+                   <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+                     <div className="max-w-3xl">
+                       <div className="text-brand-secondary text-[10px] font-black uppercase tracking-[0.5em] mb-6 text-glow">Intelligence Feed</div>
+                       <h1 className="text-6xl md:text-8xl font-black tracking-tighter italic uppercase leading-none text-white mb-8">Our <span className="text-brand-secondary">Blog</span></h1>
+                       <p className="text-white/50 text-xl font-medium max-w-2xl leading-relaxed italic">Neural insights and strategic trends for the modern enterprise.</p>
+                     </div>
+                     <button className="text-brand-secondary border-b-2 border-brand-secondary/20 pb-2 text-[10px] font-black uppercase tracking-[0.3em] hover:border-brand-secondary transition-all">Explore Insights →</button>
+                   </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
               { 
@@ -3164,21 +3533,21 @@ export default function App() {
                 date: 'April 10, 2024', 
                 author: 'Anya Sharma',
                 category: 'AI & Automation',
-                image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800'
+                image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200'
               },
               { 
                 title: 'Scaling Your SaaS: Lessons from the Frontlines', 
                 date: 'April 5, 2024', 
                 author: 'Priya Mishra',
                 category: 'SaaS Development',
-                image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800'
+                image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800'
               },
               { 
                 title: 'Mastering GA4 for Performance Marketing', 
                 date: 'March 28, 2024', 
                 author: 'Elena Rodriguez',
                 category: 'Marketing',
-                image: 'https://images.unsplash.com/photo-1551288049-bbbda536339a?auto=format&fit=crop&q=80&w=800'
+                image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800'
               }
             ].map((post, i) => (
               <motion.div
@@ -3241,7 +3610,7 @@ export default function App() {
               transition={{ duration: 0.4 }}
             >
               {/* --- CTAs & SOCIAL --- */}
-      <section id="contact" className="py-32 px-6 border-t border-brand-border relative overflow-hidden">
+      <section id="contact" className="py-20 px-6 border-t border-brand-border relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_90%_10%,rgba(56,189,248,0.03)_0%,transparent_40%)] pointer-events-none" />
         <div className="max-w-7xl mx-auto">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
@@ -3288,7 +3657,11 @@ export default function App() {
               {/* Right Side: Professional Form */}
               <div className="glass p-12 rounded-[60px] border-brand-border relative">
                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary opacity-10 blur-3xl" />
-                 <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+                  <div className="mb-10 text-center">
+                     <h3 className="text-3xl font-black text-white italic uppercase tracking-tighter">Transmission Terminal</h3>
+                     <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest mt-2">Initiate secure connection</p>
+                  </div>
+                 {contactSubmitted ? (<div className='bg-brand-secondary/10 border border-brand-secondary/30 p-12 rounded-3xl text-center'><h4 className='text-3xl font-black text-white uppercase italic mb-4'>Transmission Sent</h4><p className='text-white/60 mb-8'>Delivered to neural core.</p><button onClick={() => setContactSubmitted(false)} className='text-brand-secondary uppercase font-black text-xs hover:underline'>New Transmission</button></div>) : (<form className='space-y-8' onSubmit={(e) => { e.preventDefault(); setContactSubmitted(true); }}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                        <div className="space-y-3">
                           <label className="text-[10px] font-black text-white/20 uppercase tracking-widest ml-1">Identity</label>
@@ -3316,6 +3689,7 @@ export default function App() {
                        Submit Request <Send className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
                     </button>
                  </form>
+                  )}
               </div>
            </div>
         </div>
@@ -3421,7 +3795,7 @@ export default function App() {
           {/* Bottom Bar */}
           <div className="pt-12 border-t border-brand-border flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-[10px] font-black text-brand-text-body/60 uppercase tracking-[0.4em]">
-              © 2026 Trinexiss Technologies. All rights reserved.
+              © 2026 Trinexiss Tech. All rights reserved.
             </div>
             <div className="flex gap-8">
                {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map(item => (
